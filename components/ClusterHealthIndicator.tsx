@@ -38,7 +38,12 @@ export function ClusterHealthIndicator({ health }: ClusterHealthIndicatorProps) 
                 />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-bold">{`${(health * 100).toFixed(0)}%`}</span>
+                <span
+                    className={`text-2xl font-bold ${health * 100 < 50 ? "text-red-400" : "text-green-400"
+                        }`}
+                >
+                    {`${(health * 100).toFixed(0)}%`}
+                </span>
             </div>
         </div>
     )

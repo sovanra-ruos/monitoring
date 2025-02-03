@@ -27,13 +27,13 @@ interface DetailedChartProps {
 }
 
 export function DetailedChart({
-                                  title,
-                                  description,
-                                  data,
-                                  valueFormatter,
-                                  color,
-                                  chartType = "area",
-                              }: DetailedChartProps) {
+    title,
+    description,
+    data,
+    valueFormatter,
+    color,
+    chartType = "area",
+}: DetailedChartProps) {
     const [timeRange, setTimeRange] = useState("1h")
 
     const filteredData = data.filter((item) => {
@@ -111,19 +111,19 @@ export function DetailedChart({
 
     return (
         <Card className="col-span-2">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row text-purple-500 items-center font-semibold justify-between space-y-0 pb-2">
                 <div>
                     <CardTitle>{title}</CardTitle>
                     <CardDescription>{description}</CardDescription>
                 </div>
                 <Select defaultValue="1h" onValueChange={(value) => setTimeRange(value)}>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-[180px] bg-purple-500 text-white">
                         <SelectValue placeholder="Select time range" />
                     </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="1h">Last 1 hour</SelectItem>
-                        <SelectItem value="6h">Last 6 hours</SelectItem>
-                        <SelectItem value="24h">Last 24 hours</SelectItem>
+                    <SelectContent className="bg-purple-500 text-white">
+                        <SelectItem value="1h" className="hover:bg-purple-700">Last 1 hour</SelectItem>
+                        <SelectItem value="6h" className="hover:bg-purple-700">Last 6 hours</SelectItem>
+                        <SelectItem value="24h" className="hover:bg-purple-700">Last 24 hours</SelectItem>
                     </SelectContent>
                 </Select>
             </CardHeader>

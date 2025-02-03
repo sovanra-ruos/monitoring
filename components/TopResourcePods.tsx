@@ -25,7 +25,7 @@ export function TopResourcePods({ cpuPods, memoryPods }: TopResourcePodsProps) {
         <div className="grid gap-4 md:grid-cols-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Top CPU Consuming Pods</CardTitle>
+                    <CardTitle className="text-purple-500 font-semibold">Top CPU Consuming Pods</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="h-[200px]">
@@ -58,7 +58,7 @@ export function TopResourcePods({ cpuPods, memoryPods }: TopResourcePodsProps) {
             </Card>
             <Card>
                 <CardHeader>
-                    <CardTitle>Top Memory Consuming Pods</CardTitle>
+                    <CardTitle className="text-purple-500 font-semibold">Top Memory Consuming Pods</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="h-[200px]">

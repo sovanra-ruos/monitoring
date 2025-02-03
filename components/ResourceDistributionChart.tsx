@@ -17,7 +17,7 @@ export function ResourceDistributionChart({ title, data }: ResourceDistributionC
     return (
         <Card>
             <CardHeader>
-                <CardTitle>{title}</CardTitle>
+                <CardTitle className="text-purple-500 font-semibold">{title}</CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="h-[300px]">
