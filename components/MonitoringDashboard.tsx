@@ -9,7 +9,7 @@ import { DetailedChart } from "./DetailedChart"
 import { MetricsRadarChart } from "./MetricsRadarChart"
 import { motion } from "framer-motion"
 
-import { Activity, Server, HardDrive } from "lucide-react"
+import { Activity, Server, HardDrive, Loader2 } from "lucide-react"
 import { PrometheusQueryResult, PrometheusValue } from "@/lib/prometheus";
 import ResourceDistributionChart from "@/components/ResourceDistributionChart";
 
@@ -42,13 +42,14 @@ export function MonitoringDashboard() {
         topPodsMemory: [],
         clusterHealth: 1,
     })
+    const [isLoading, setIsLoading] = useState(true) // Add loading state
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setIsLoading(true) // Set loading to true before fetching data
                 const response = await fetch("/api/prometheus")
                 const result: PrometheusQueryResult = await response.json()
-
                 const newData: DashboardData = {
                     cpuUsage: [],
                     memoryUsage: [],
@@ -90,12 +91,13 @@ export function MonitoringDashboard() {
                 setData(newData)
             } catch (error) {
                 console.error("Error fetching monitoring data:", error)
+            } finally {
+                setIsLoading(false) // Set loading to false after data is fetched
             }
         }
 
         fetchData()
         const interval = setInterval(fetchData, 60000) // Fetch data every minute
-
         return () => clearInterval(interval)
     }, [])
 
@@ -122,22 +124,33 @@ export function MonitoringDashboard() {
         { subject: "Pods", A: 85, B: 90 },
     ]
 
+    // Loading Indicator Component
+    const LoadingIndicator = () => (
+        <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+            <div className="flex gap-2">
+                <Loader2 className="animate-spin text-purple-500 text-6xl" />
+                <h1 className="text-xl text-purple-500">Loading</h1>
+            </div>
+        </div>
+    )
+    if (isLoading) {
+        return <LoadingIndicator />
+    }
+
     return (
         <div className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-2xl shadow-lg border border-purple-500/20 p-6 transition-transform duration-300 hover:scale-[1.02]">
+                <Card className="rounded-2xl shadow-lg border border-purple-200 p-6 transition-transform duration-300 hover:scale-[1.02]">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         {/* Cluster Health Title */}
-                        <CardTitle className="text-sm font-semibold text-white">
+                        <CardTitle className="text-sm font-semibold text-purple-500">
                             Cluster Health
                         </CardTitle>
 
                         {/* Activity Icon with Glow Effect */}
                         <Activity
-                            className="h-6 w-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-300 relative"
+                            className="h-6 w-6 text-purple-500 relative"
                         >
-                            {/* Add a glow effect */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full blur-md opacity-50 animate-pulse"></div>
                         </Activity>
                     </CardHeader>
 
@@ -148,27 +161,26 @@ export function MonitoringDashboard() {
                         />
                     </CardContent>
                 </Card>
-                <Card className="bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-2xl shadow-lg border border-purple-500/20 p-6 transition-transform duration-300 hover:scale-[1.02]">
+                <Card className="rounded-2xl shadow-lg border border-purple-200 p-6 transition-transform duration-300 hover:scale-[1.02]">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         {/* Pods Title */}
-                        <CardTitle className="text-sm font-semibold text-white">
+                        <CardTitle className="text-sm font-semibold text-purple-500">
                             Pods
                         </CardTitle>
 
                         {/* Server Icon with Glow Effect */}
                         <div className="relative">
                             <Server
-                                className="h-6 w-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-300 transition-transform duration-300 hover:scale-110"
+                                className="h-6 w-6 text-purple-500 relative"
                             />
-                            {/* Add a glow effect */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full blur-md opacity-50 animate-pulse"></div>
+
                         </div>
                     </CardHeader>
 
                     <CardContent className="mt-4">
                         {/* Animated Pod Count */}
                         <motion.div
-                            className="text-2xl font-bold text-white"
+                            className="text-2xl font-bold text-purple-500"
                             initial={{ scale: 0.5, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.5 }}
@@ -177,27 +189,25 @@ export function MonitoringDashboard() {
                         </motion.div>
                     </CardContent>
                 </Card>
-                <Card className="bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-2xl shadow-lg border border-purple-500/20 p-6 transition-transform duration-300 hover:scale-[1.02]">
+                <Card className="rounded-2xl shadow-lg border border-purple-200 p-6 transition-transform duration-300 hover:scale-[1.02]">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         {/* Services Title */}
-                        <CardTitle className="text-sm font-semibold text-white">
+                        <CardTitle className="text-sm font-semibold text-purple-500">
                             Services
                         </CardTitle>
 
                         {/* HardDrive Icon with Glow Effect */}
                         <div className="relative">
                             <HardDrive
-                                className="h-6 w-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-300 transition-transform duration-300 hover:scale-110"
+                                className="h-6 w-6 text-purple-500 relative"
                             />
-                            {/* Add a glow effect */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full blur-md opacity-50 animate-pulse"></div>
                         </div>
                     </CardHeader>
 
                     <CardContent className="mt-4">
                         {/* Animated Service Count */}
                         <motion.div
-                            className="text-2xl font-bold text-white"
+                            className="text-2xl font-bold text-purple-500"
                             initial={{ scale: 0.5, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.5 }}
@@ -206,20 +216,18 @@ export function MonitoringDashboard() {
                         </motion.div>
                     </CardContent>
                 </Card>
-                <Card className="bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-2xl shadow-lg border border-purple-500/20 p-6 transition-transform duration-300 hover:scale-[1.02]">
+                <Card className="rounded-2xl shadow-lg border border-purple-200 p-6 transition-transform duration-300 hover:scale-[1.02]">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         {/* Network Traffic Title */}
-                        <CardTitle className="text-sm font-semibold text-white">
+                        <CardTitle className="text-sm font-semibold text-purple-500">
                             Network Traffic
                         </CardTitle>
 
                         {/* Activity Icon with Glow Effect */}
                         <div className="relative">
                             <Activity
-                                className="h-6 w-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-300 transition-transform duration-300 hover:scale-110"
+                                className="h-6 w-6 text-purple-500 relative"
                             />
-                            {/* Add a glow effect */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full blur-md opacity-50 animate-pulse"></div>
                         </div>
                     </CardHeader>
 
@@ -230,8 +238,8 @@ export function MonitoringDashboard() {
                                 <AreaChart data={data.networkTraffic}>
                                     <defs>
                                         <linearGradient id="colorNetwork" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                                            <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                                            <stop offset="5%" stopColor="#4B0082" stopOpacity={0.8} />
+                                            <stop offset="95%" stopColor="#4B0082" stopOpacity={0} />
                                         </linearGradient>
                                     </defs>
                                     <Area
@@ -241,9 +249,9 @@ export function MonitoringDashboard() {
                                         fill="url(#colorNetwork)"
                                         strokeWidth={2}
                                     />
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff30" />
-                                    <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fill: '#ffffff80', fontSize: 10 }} />
-                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#ffffff80', fontSize: 10 }} />
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#00000030" />
+                                    <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fill: '#00000080', fontSize: 10 }} />
+                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#00000080', fontSize: 10 }} />
                                 </AreaChart>
                             </ResponsiveContainer>
                         </div>

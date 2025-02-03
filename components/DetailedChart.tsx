@@ -35,7 +35,6 @@ export function DetailedChart({
     chartType = "area",
 }: DetailedChartProps) {
     const [timeRange, setTimeRange] = useState("1h")
-
     const filteredData = data.filter((item) => {
         const now = Date.now()
         switch (timeRange) {
@@ -105,7 +104,19 @@ export function DetailedChart({
                     </ComposedChart>
                 )
             default:
-                return null
+                // Fallback to an empty AreaChart if chartType is invalid
+                return (
+                    <AreaChart data={filteredData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="timestamp" tickFormatter={(unixTime) => new Date(unixTime).toLocaleTimeString()} />
+                        <YAxis tickFormatter={valueFormatter} />
+                        <Tooltip
+                            labelFormatter={(label) => new Date(label).toLocaleString()}
+                            formatter={(value: number) => [valueFormatter(value), title]}
+                        />
+                        <Area type="monotone" dataKey="value" stroke={color} fillOpacity={1} fill={`url(#color${title})`} />
+                    </AreaChart>
+                )
         }
     }
 
