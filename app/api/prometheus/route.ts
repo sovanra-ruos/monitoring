@@ -13,7 +13,7 @@ interface PrometheusResponse {
 }
 
 async function queryPrometheus(query: string): Promise<PrometheusResponse> {
-    const baseUrl = "http://35.197.142.89:30852" // Replace with your actual Prometheus URL
+    const baseUrl = "http://34.87.59.148:32325" // Replace with your actual Prometheus URL
     const url = `${baseUrl}/api/v1/query?query=${encodeURIComponent(query)}`
 
     const response = await fetch(url)

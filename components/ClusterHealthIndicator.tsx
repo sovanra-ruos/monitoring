@@ -44,4 +44,3 @@ export function ClusterHealthIndicator({ health }: ClusterHealthIndicatorProps) 
     )
 }
 
-export default ClusterHealthIndicator
